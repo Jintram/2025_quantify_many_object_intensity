@@ -1,5 +1,12 @@
 
+################################################################################
 
+# Information
+# 
+# Channel 0: channel of interest, contains nuclei.
+# Channel 1: channel with chlorophyll, could be used for normalization (Q: is this autofluorescence?)
+
+################################################################################
 
 # import PIL for loading tif
 import numpy as np
@@ -10,7 +17,12 @@ from skimage.feature import peak_local_max
 from skimage.filters import median
 from skimage.morphology import disk
 
+from scipy.ndimage import convolve
+
 import matplotlib.pyplot as plt
+
+import pandas as pd
+import seaborn as sns
 
 cm_to_inch = 1/2.54
 
@@ -22,6 +34,10 @@ img2_path = '/Users/m.wehrens/Data_UVA/2024_small-analyses/KevinPeek/example_dat
 # load the images
 img1 = tifffile.imread(img1_path)[0]
 img2 = tifffile.imread(img2_path)[0]
+
+
+################################################################################
+# Some playing around to test stuff
 
 img = img2
 
@@ -150,13 +166,110 @@ import pandas as pd
 df_intensities = pd.concat([pd.DataFrame({'label':'img1', 'vals':top100_vals_img1}),
                             pd.DataFrame({'label':'img2', 'vals':top100_vals_img2})])
 
-# now plot using seaborn
+
+# now plot the 1st image with selected coordinates on top
+plt.imshow(np.log(img1+1), cmap='viridis')
+plt.scatter(coordinates_top_n_img1[:, 1],coordinates_top_n_img1[:, 0],
+            facecolors='none',edgecolors='white',s=100,linewidths=1,marker='s')
+plt.title('Top 30 local maxima in img1')
+plt.show(); plt.close()
+
+
+# now plot the gathered statistics using seaborn
 import seaborn as sns
 fig, ax = plt.subplots(figsize=(5.2*cm_to_inch, 5.2*cm_to_inch))
 plt.rcParams.update({'font.size': 8})
 # sns.boxplot(x='label', y='vals', data=df_intensities)
 sns.violinplot(x='label', y='vals', data=df_intensities, inner=None, facecolor='lightgrey', linewidth=0.5, ax=ax)
 sns.stripplot(x='label', y='vals', data=df_intensities, color='black', ax=ax, size=1)
+# rotate x axis labels 90 deg
+plt.xticks(rotation=90)
+# add the level of saturated pixels as a horizontal line
+ax.axhline(np.iinfo(img1.dtype).max, color='red', linestyle='--', label='background level', linewidth=.5)
+# add the background level as horizontal line
+ax.axhline(background_lvl_max, color='blue', linestyle='--', label='background level img1', linewidth=.5)
+ax.set_ylabel('Intensities of brightest')
+ax.set_xlabel('')
+plt.tight_layout()
+# plt.show()
+# save the image to outpudir
+plt.savefig(outpudir + 'quantify_strategy1_intensities.pdf', dpi=300, bbox_inches='tight')
+plt.close()
+
+
+
+################################################################################
+
+def convolve_with_disk(img, radius=2):
+    """
+    Convolves the input image with a normalized disk mask of given radius.
+    The idea here is that nucleu are ±disk shaped, and have the highest signal.
+    So by for every pixel calculating the local average in a disk-shaped
+    neighborhood, the signal from actual nuclei is amplified, and the maximum
+    of the convolution image will lie at the images center.
+    
+    Parameters:
+        img (ndarray): Input image.
+        radius (int): Radius of the disk mask.
+        
+    Returns:
+        img_convolved (ndarray): Convolved image.
+    """
+    disk_mask = disk(radius) / np.sum(disk(radius))
+    img_convolved = convolve(img, disk_mask)
+    return img_convolved
+
+
+
+img1_conv = convolve_with_disk(img1)
+img2_conv = convolve_with_disk(img2)
+
+peaks1, vals1 = get_top_n_local_maxima(img1_conv, n=30, min_distance=8)
+peaks2, vals2 = get_top_n_local_maxima(img2_conv, n=30, min_distance=8)
+
+
+# plot for the two images
+def plot_peaks_on_images(img_conv, img, peaks, sample_name):
+    """
+    Plots the convolved image and the original image side by side,
+    overlaying the detected peaks.
+
+    Parameters:
+        img_conv (ndarray): The convolved image.
+        img (ndarray): The original image.
+        peaks (ndarray): Array of peak coordinates (N, 2).
+    """
+    fig, ax = plt.subplots(1, 2, figsize=(15*cm_to_inch, 10*cm_to_inch))
+    plt.rcParams.update({'font.size': 8})
+    ax[0].set_title('Modified image')
+    ax[0].imshow(img_conv)
+    ax[0].scatter(peaks[:, 1], peaks[:, 0],
+                  facecolors='none', edgecolors='white', s=30, linewidths=.5, marker='s')
+    ax[1].set_title('Original image')
+    ax[1].imshow(img)
+    ax[1].scatter(peaks[:, 1], peaks[:, 0],
+                  facecolors='none', edgecolors='white', s=30, linewidths=.5, marker='s')
+    plt.tight_layout()
+    # plt.show()
+    plt.savefig(outpudir + f'quantify_strategy1_convolved_peaks_img{sample_name}.pdf', dpi=300, bbox_inches='tight')
+    plt.close()   
+    
+plot_peaks_on_images(img1_conv, img1, peaks1, 'img1')
+plot_peaks_on_images(img2_conv, img2, peaks2, 'img2')    
+
+
+################################################################################
+# And plot again
+
+df_intensities_s2 = pd.concat([pd.DataFrame({'label':'img1', 'vals':vals1}),
+                            pd.DataFrame({'label':'img2', 'vals':vals2})])
+
+# now plot the gathered statistics using seaborn
+fig, ax = plt.subplots(figsize=(5.2*cm_to_inch, 5.2*cm_to_inch))
+plt.rcParams.update({'font.size': 8})
+# sns.boxplot(x='label', y='vals', data=df_intensities)
+sns.violinplot(x='label', y='vals', data=df_intensities_s2, inner=None, facecolor='lightgrey', linewidth=0.5, ax=ax)
+sns.stripplot(x='label', y='vals', data=df_intensities_s2, color='black', ax=ax, size=1)
 # rotate x axis labels 90 deg
 plt.xticks(rotation=90)
 # add the level of saturated pixels as a horizontal line
