@@ -96,7 +96,7 @@ def convolve_with_disk(img, radius=2):
     return img_convolved
 
 #%% ###############################################################################
-# Plotting functions
+# Plotting functions for images
 
 # plot for the two images
 def plot_peaks_on_images(img_conv, img, peaks, sample_name, outputdir):
