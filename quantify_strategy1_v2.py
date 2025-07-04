@@ -22,6 +22,9 @@ import seaborn as sns
 
 cm_to_inch = 1/2.54
 
+################################################################################
+# SCRIPT SETTINGS
+
 # 
 outpudir = '/Users/m.wehrens/Data_UVA/2024_small-analyses/KevinPeek/python_out/'
 # import two images
