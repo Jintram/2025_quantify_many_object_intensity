@@ -1,2 +1,31 @@
 
+# Description
+
+### Script to quantify FP expression in nuclei in demixed FLIM images
+
+The nuclei can be of varying brightness, due to their location in Z-plane,
+or due to varying degree of fluorescent protein expression.
+
+Since brightness of these nuclei can be comparable to background levels, 
+only brighter nuclei can be detected, skewing the measurement.
+
+The choice was therefor made to specifically focus on the brightest X nuclei
+in the image, as a proxy for FP expression in a specific sample.
+
+### Detection of nuclei
+
+Segmentation of *all* nuclei is hard because of aformentioned varying brightness.
+
+Assuming that the brightest pixels are located in nuclei that consist of multiple
+pixels, whilst there might also be stray pixels with high values, signal from nuclei
+can be detected by looking for clusters of pixels with higher than background signal.
+
+This is done by applying a convolution with a disk with a radius similar to the 
+radius of the nuclei, and looking for locations with the highest signal. 
+
+The locations of the the top X brightest pixels after convolution are then collected
+(with a minimum distance such that nuclei aren't located redundantly).
+
+
+### Technical background: FLIM measurement
 
