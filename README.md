@@ -1,12 +1,12 @@
 
 
-### Script to quantify FP expression in nuclei in demixed FLIM images
+# Script to quantify FP expression in nuclei in demixed FLIM images
 
 This script aims to quantify the expression of fluorescent proteins (FPs) in nuclei.
 
 ### Quick use guide
 
-See the script `quantnuclei_analyse-experiment.py` on how to analyze an experiment.
+Use the script `quantnuclei_analyse-experiment.py` to analyze an experiment.
 
 ### Rationale behind the script
 
