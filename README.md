@@ -7,6 +7,7 @@ This script aims to quantify the expression of fluorescent proteins (FPs) in nuc
 ### Prerequisites
 
 - Make sure you have Python and the correct libraries installed. 
+    - Required libraries: pandas, numpy, tifffile, scikit-image, scipy, matplotlib, seaborn, openpyxl.
     - This can e.g. be done using Conda. See e.g. this [blog post](https://www.biodsc.nl/posts/installing_conda_python.html).
     - If you use conda, you can use the following line in the terminal to install: 
 ```
