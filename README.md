@@ -55,6 +55,8 @@ autofluorescent plant molecules. The lifetimes of these two signals is however
 different, such that unmixing can produce intensity images that reflect the concentration
 of the FP (but not the background).
 
+At time of writing, typical tiff input images contain two channels, the first being the (de-mixed) nuclear signal measured with settings appropriate for tdTomato, and the second corresponding to [XXX], which is currently not used.
+
 
 ### Methods summary
 
