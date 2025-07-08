@@ -133,10 +133,6 @@ def analyze_files(image_paths, outputdir, desired_channel=0, topN=30, min_distan
     '''
     # desired_channel=0; topN=30; min_distance=4; makeplots=True
     
-    # initialize plotting output directory
-    if makeplots:
-        os.makedirs(outputdir+'/plots/', exist_ok=True)
-    
     # initialize dataframe list to gather output (on df per image, concatenated later)
     df_list = [None] * len(image_paths)
     
@@ -179,7 +175,8 @@ def analyze_files(image_paths, outputdir, desired_channel=0, topN=30, min_distan
         
         # create a plot
         if makeplots:
-            plot_peaks_on_images(img_conv, img, coordinates_top_n, filename, outputdir)
+            os.makedirs(outputdir+'/sample_plots/', exist_ok=True)
+            plot_peaks_on_images(img_conv, img, coordinates_top_n, filename, outputdir+'/sample_plots/')
     
     # now concatenate all dfs together
     df_nucleidata = pd.concat(df_list, ignore_index=True)
@@ -206,7 +203,7 @@ def annotate_df_wfilenames(df_nucleidata, metadata_table=None):
 def plot_statistics(df_nucleidata, outputdir, showplot=True):
     # now plot the gathered statistics using seaborn
     
-    os.makedirs(outputdir+'/summaryplots/', exist_ok=True)
+    os.makedirs(outputdir+'/summary_plots/', exist_ok=True)
     
     fig, ax = plt.subplots(figsize=(15.2*cm_to_inch, 15.2*cm_to_inch))
     plt.rcParams.update({'font.size': 8})
@@ -224,7 +221,7 @@ def plot_statistics(df_nucleidata, outputdir, showplot=True):
     plt.tight_layout()
     # plt.show()
     # save the image to outpudir
-    plt.savefig(outputdir + 'Nuclei_intensities_overview.pdf', dpi=300, bbox_inches='tight')
+    plt.savefig(outputdir+'/summary_plots/' + 'Nuclei_intensities_overview.pdf', dpi=300, bbox_inches='tight')
     if showplot:
         plt.show()
     plt.close()

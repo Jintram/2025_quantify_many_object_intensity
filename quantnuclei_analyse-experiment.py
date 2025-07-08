@@ -19,7 +19,7 @@ input_images_searchstring = '/Users/m.wehrens/Data_UVA/2024_small-analyses/2025_
 # Location of metadata table (should have column "KPM" which contains a number only, without "KPM")
 metadata_filepath = '/Users/m.wehrens/Data_UVA/2024_small-analyses/2025_KevinPeek/DATA/Excel identifiers martijn.xlsx'
 # set the output directory
-outputdir = '/Users/m.wehrens/Data_UVA/2024_small-analyses/2025_KevinPeek/ANALYSIS/20250704_Analysis-Python/'
+outputdir = '/Users/m.wehrens/Data_UVA/2024_small-analyses/2025_KevinPeek/ANALYSIS/20250704_Analysis-Python-rerun/'
 
 # Get filelist and metadata table
 metadata_table = pd.read_excel(metadata_filepath)

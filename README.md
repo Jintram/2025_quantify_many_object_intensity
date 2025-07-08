@@ -4,9 +4,20 @@
 
 This script aims to quantify the expression of fluorescent proteins (FPs) in nuclei.
 
+### Prerequisites
+
+- Make sure you have Python and the correct libraries installed. 
+    - This can e.g. be done using Conda. See e.g. this [blog post](https://www.biodsc.nl/posts/installing_conda_python.html).
+    - If you use conda, you can use the following line in the terminal to install: 
+```
+conda create -n 2025_PeekNuclei python=3.10 pandas numpy tifffile scikit-image scipy matplotlib seaborn
+conda install openpyxl
+```
+
 ### Quick use guide
 
-Use the script `quantnuclei_analyse-experiment.py` to analyze an experiment.
+Navigate to the directory where you installed the scripts (or otherwise make sure that that directory is the working directory) and 
+use the script `quantnuclei_analyse-experiment.py` to analyze an experiment.
 
 ### Rationale behind the script
 
