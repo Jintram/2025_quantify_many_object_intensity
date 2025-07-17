@@ -176,7 +176,7 @@ def analyze_files(image_paths, outputdir, desired_channel=0, topN=30, min_distan
     df_list = [None] * len(image_paths)
     
     for idx, img_path in enumerate(image_paths):
-        # img_path = image_paths[0]
+        # idx = 0; img_path = image_paths[idx]
         
         # determine the filename (for annotation purposes)
         filename = img_path.split('/')[-1].split('.')[0]
