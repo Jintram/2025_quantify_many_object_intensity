@@ -227,7 +227,7 @@ def analyze_files(image_paths, outputdir, desired_channel=0, topN=30, min_distan
 
 def annotate_df_wfilenames(df_nucleidata, metadata_table=None):
     '''
-    Annotate the dataframe with metadata based on filenames.
+    Annotate the data dataframe with metadata based on filenames and metadata_table.
     Note that this makes a load of assumptions about the filenames.
     '''    
     
