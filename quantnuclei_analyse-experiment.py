@@ -13,6 +13,7 @@ import quantnuclei_functions as qf # import importlib; importlib.reload(qf)
 
 #%% ###############################################################################
 
+
 # Analysis of experiment "Alldata_202506" 
 # Where to look for images
 input_images_searchstring = '/Users/m.wehrens/Data_UVA/2024_small-analyses/2025_KevinPeek/DATA/Alldata_202506/*.tif'
@@ -39,6 +40,7 @@ df_nucleidata.to_pickle(outputdir + 'Nuclei_intensities.pkl')
 # df_nucleidata = pd.read_pickle(outputdir + 'Nuclei_intensities.pkl')
 
 # generate an overview plot
-qf.plot_statistics(df_nucleidata, outputdir, showplot=True)
+# qf.plot_statistics(df_nucleidata, outputdir, showplot=True)
+qf.plot_statistics(df_nucleidata, outputdir, showplot=True, max_img_value=255)
 
 # %%
